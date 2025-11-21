@@ -6,6 +6,7 @@ It supports intelligent AI chat, image generation, a credit-based usage system, 
 
 ---
 
+Demo Vide0- https://quick-gpt-pro.vercel.app/
 ## ✨ Features
 
 ### 🤖 AI Chat System  
