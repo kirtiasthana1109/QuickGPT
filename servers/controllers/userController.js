@@ -61,27 +61,57 @@ export const getUser = async (req,res)=> {
 }
    
 // API to get published images
-export const getPublishedImages = async (req,res) => {
-    try{
-        const publishedImages=await Chat.aggregate([
-            {$unwind:"$messages"},
-            {
-                $match:{
-                    "messages.isImage":true,
-                    "messages.isPublished":true
-                }
-            },
-            {
-                $project:{
-                    _id:0,  
-                    imageUrl:"$messages.content",
-                    userName:"$userName"
+// export const getPublishedImages = async (req,res) => {
+//     try{
+//         const publishedImages=await Chat.aggregate([
+//             {$unwind:"$messages"},
+//             {
+//                 $match:{
+//                     "messages.isImage":true,
+//                     "messages.isPublished":true
+//                 }
+//             },
+//             {
+//                 $project:{
+//                     _id:0,  
+//                     imageUrl:"$messages.content",
+//                     userName:"$userName"
                     
-            }
-    }
-])
-        return res.json({success:true, images: publishedImageMessages.reverse()})
-    } catch(error){
-        return res.json({success:false, message:error.message})
-    }
-}
+//             }
+//     }
+// ])
+//         return res.json({success:true, images: publishedImageMessages.reverse()})
+//     } catch(error){
+//         return res.json({success:false, message:error.message})
+//     }
+// }
+
+// API to get published images
+export const getPublishedImages = async (req, res) => {
+  try {
+    // Saare chats jisme published images hain
+    const chats = await Chat.find({
+      "messages.isImage": true,
+      "messages.isPublished": true,
+    }).populate("userId", "name");  // user ka naam lane ke liye
+
+    const images = [];
+
+    chats.forEach((chat) => {
+      chat.messages.forEach((msg) => {
+        if (msg.isImage && msg.isPublished) {
+          images.push({
+            imageUrl: msg.content,                  // 👈 Community.jsx yahi use karega
+            userName: chat.userId?.name || "Unknown",
+            createdAt: msg.timestamp,
+          });
+        }
+      });
+    });
+
+    // latest images pehle dikhane ke liye reverse
+    return res.json({ success: true, images: images.reverse() });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};

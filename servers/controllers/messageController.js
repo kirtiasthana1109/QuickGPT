@@ -91,7 +91,7 @@ export const imageMessageController=async(req,res)=>{
         content:uploadResponse.url,
         timestamp:Date.now(),
         isImage:true,
-         isPublished
+         isPublished:Boolean(isPublished),
         }
         
         res.json({success:true,reply})

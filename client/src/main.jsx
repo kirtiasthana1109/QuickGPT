@@ -1,14 +1,16 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import { BrowserRouter } from 'react-router-dom'
-import { AppContextProvider } from './context/AppContext.jsx'
 
-createRoot(document.getElementById('root')).render(
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+import { AppContextProvider } from './context/AppContext';
+import './index.css'; // agar tumhari global CSS hai
+
+ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-  <AppContextProvider>
-    <App />
-  </AppContextProvider>
-  </BrowserRouter>,
-)
+    <AppContextProvider>
+      <App />
+    </AppContextProvider>
+  </BrowserRouter>
+);
